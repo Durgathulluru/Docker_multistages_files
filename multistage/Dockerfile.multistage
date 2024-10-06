@@ -1,0 +1,15 @@
+# Dockerfile.multistage
+FROM registry.access.redhat.com/ubi8/openjdk-11:1.3 AS builder
+
+WORKDIR /deployments
+COPY . /deployments
+
+RUN mvn package
+
+FROM gcr.io/distroless/java:11 AS runner
+
+COPY --from=builder /deployments/target/demo-webapp-0.0.1-SNAPSHOT.jar .
+
+EXPOSE 8080
+
+CMD ["demo-webapp-0.0.1-SNAPSHOT.jar"]

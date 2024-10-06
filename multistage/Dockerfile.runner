@@ -1,0 +1,8 @@
+#Dockerfile.runner
+FROM gcr.io/distroless/java:11
+
+COPY ./deployments/target/demo-webapp-0.0.1-SNAPSHOT.jar .
+
+EXPOSE 8080
+
+CMD ["demo-webapp-0.0.1-SNAPSHOT.jar"]

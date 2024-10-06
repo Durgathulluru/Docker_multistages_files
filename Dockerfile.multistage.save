@@ -1,0 +1,69 @@
+# Use the official Ubuntu 18.04 base image for the build stage
+FROM alpine:3.15.11 as builder
+
+RUN apk add --no-cache --update
+
+RUN apk add --no-cache make gcc tar  musl-dev openssl-dev
+
+#RUN adduser -D redis  # Create user redis (if needed)
+#USER redis
+
+ENV REDIS_URL http://download.redis.io/redis-stable.tar.gz
+
+#RUN wget "$REDIS_URL"
+#ls
+
+RUN wget -O "$REDIS_URL"
+
+#RUN ls
+RUN tar -xzf redis-stable.tar.gz 
+#RUN chown root:root redis-stable
+  # Create user redis (if needed)
+#USER root
+#RUN chmod -R 755 redis-stable
+RUN cd redis-stable; \
+    ls -la; \
+    pwd; \
+#    make BUILD_TLS=yes
+#WORKDIR redis-stable
+    
+#RUN  make
+ #   cp src/redis-server /usr/local/bin/redis-server
+#CMD ["redis-server"]
+
+
+
+
+# Install necessary dependencies
+##RUN apt-get update && apt-get install -y lsb-release curl gnupg
+
+# Fetch the Redis repository GPG key
+##RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+
+# Add the Redis repository to sources.list
+##RUN chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg && echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list
+
+# Update package lists and install Redis
+##RUN apt-get update && apt-get install -y redis-stack-server
+
+# Start a new build stage with the scratch image as the base
+#FROM alpine:3.15.11
+
+#WORKDIR /etc/
+# Copy the Redis binary from the previous stage
+#COPY --from=builder /etc/apt/sources.list.d/redis.list  /apt/sources.list.d/redis.list
+#RUN ls
+#COPY --from=builder /etc/redis-stack.conf redis-stack.conf 
+
+##RUN pwd
+
+##WORKDIR /usr/bin/
+
+##COPY --from=builder /usr/bin/redis-stack-server redis-stack-server
+
+##RUN pwd 
+
+#WORKDIR /usr/bin/
+# Set the default command to run Redis
+#CMD ["redis-stack-server"]
+

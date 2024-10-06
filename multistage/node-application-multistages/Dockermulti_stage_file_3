@@ -1,0 +1,34 @@
+# stage :1
+From node:20-alpine AS build
+
+#ENV DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /app
+
+#RUN  apk update && \
+#     apk add nodejs npm
+
+COPY app.js .
+
+#RUN adduser -h /app -D -s /bin/sh nodeuser
+
+#USER nodeuser
+
+#RUN apk add --no-cache libc6-compat
+ 
+RUN npm install -g  pkg@10.5.2
+ 
+RUN pkg app.js --targets node20-alpine --output app1
+
+# stage:2
+FROM node:20.13.1-alpine3.20 AS runner
+#RUN apk add --no-cache nginx
+
+EXPOSE 80
+ 
+WORKDIR /app
+
+
+COPY --from=build /app/app1 .
+
+CMD ["./app1"]

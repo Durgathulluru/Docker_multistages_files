@@ -1,0 +1,21 @@
+version: '2'
+services:
+  #Nginx Service
+   web:
+     image: nginx:alpine
+    # container_name: webserver
+     restart: unless-stopped
+     ports:
+       - "80-90:80"
+       - "443-453:443"
+     depends_on:
+     - Mysqldb
+   #Mysql DB
+   Mysqldb:
+     image: mysql:5.7
+     #container_name: Mysqldb
+     restart: unless-stopped
+     ports:
+       - "3306-3309:3306"
+     environment:
+       MYSQL_ROOT_PASSWORD: "rootroot"

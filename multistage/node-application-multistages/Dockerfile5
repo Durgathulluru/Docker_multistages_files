@@ -1,0 +1,36 @@
+# First Stage: Build
+FROM node:12-alpine AS builder
+
+# Set the working directory
+WORKDIR /app
+
+# Create a minimal package.json (you can customize this)
+#COPY package*.json .
+
+# Install dependencies (if any)
+#RUN npm install
+
+# Copy the application code
+COPY app.js .
+
+#RUN chmod +x /app/app.js 
+# Bundle the application into a binary using pkg
+RUN npm install -g pkg
+RUN pkg app.js --target node12-alpine --output mybinary 
+RUN ls
+# Second Stage: Runtime
+FROM node:12-alpine AS runner
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the binary from the first stage
+COPY --from=builder /app/mybinary .
+#COPY --from=builder /app/package*.json /app/.
+RUN chmod +x /app/mybinary
+#RUN npm install pkg
+RUN pwd
+RUN ls
+# Specify the entry point (or CMD) to run your application
+CMD [ "./mybinary"]
+

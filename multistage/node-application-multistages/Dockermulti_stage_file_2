@@ -1,0 +1,29 @@
+# stage :1
+From node:12-alpine AS build
+
+#ENV DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /app
+
+#RUN  apk update && \
+#     apk add nodejs npm
+
+COPY app.js package.json  /app/
+
+RUN npm install
+RUN npm build
+
+
+# stage:2
+#FROM node:12-alpine AS runner
+#RUN apk add --no-cache nginx
+#RUN apk update && \
+ #   apk add nodejs npm
+
+#EXPOSE 80
+ 
+#WORKDIR /app
+
+#COPY --from=build /app/dist ./dist 
+
+#CMD ["node", "app.js"]

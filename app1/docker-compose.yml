@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: webapp:v1
+    ports:
+       - "8001-8010:80"
+  

@@ -1,0 +1,18 @@
+# Use the official Alpine 3.15.11 base image for the build stage
+FROM alpine:3.15.11 as builder
+
+# Install necessary dependencies
+RUN apk update && apk add --no-cache alpine-sdk curl gnupg
+
+# Fetch the Redis repository GPG key
+RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+
+# Add the Redis repository to sources.list
+RUN chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg && echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" > /etc/apk/repositories
+
+# Update package lists and install Redis
+RUN apk update && apk add --no-cache redis
+
+# Set the default command to start Redis server
+CMD ["redis-server"]
+
